@@ -1,5 +1,11 @@
 package cn.epaylinks.boot;
 
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -18,6 +24,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 
 import cn.epaylinks.controller.UserController;
 
@@ -57,10 +70,20 @@ public class App
 	}
 
 	@RequestMapping("/")
-	String index()
+	String index(HttpServletRequest request,HttpServletResponse response)
 	{
-		System.out.println("进入首页");
-		return "index";
+		System.out.println("进入首页,先生成UUID");
+		
+		request.setAttribute("uuid", UUID.randomUUID());
+		
+		return "pages/index";
+	}
+	
+	@RequestMapping("/main")
+	String main()
+	{
+		System.out.println("进入主页面");
+		return "pages/main";
 	}
 
 	public static void main(String[] args)
